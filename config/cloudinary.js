@@ -1,4 +1,5 @@
 const cloudinary = require('cloudinary').v2;
+require('domain').config()
 
 exports.cloudinaryConnect = () =>{
     try {
@@ -8,6 +9,6 @@ exports.cloudinaryConnect = () =>{
             api_key:process.env.API_SECRET
         })
     } catch (error) {
-        
+        console.log(error)
     }
 }
