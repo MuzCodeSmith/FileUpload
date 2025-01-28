@@ -1,5 +1,5 @@
 const cloudinary = require('cloudinary').v2;
-require('domain').config()
+require('dotenv').config()
 
 exports.cloudinaryConnect = () =>{
     try {
