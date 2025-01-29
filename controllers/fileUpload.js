@@ -36,14 +36,12 @@ async function uploadFileToCloudinary(file,folder){
 exports.imageUpload = async (req,res)=>{
     try {
         const {name, tags, email} = req.body;
-        console.log(name, tags, email)
 
         const file = req.files.imageFile;
-        console.log("file:",file);
 
         const supportedFormats = ['jpg','jpeg','png'];
         const fileType = file.name.split('.')[1].toLowerCase();
-        console.log("fileType: ",fileType)
+
         if(!isSupportedFormat(fileType,supportedFormats)){
             console.log("entered into !isSupportedFormat")
             return res.status(500).json({
@@ -53,16 +51,23 @@ exports.imageUpload = async (req,res)=>{
         }
 
         const response = await uploadFileToCloudinary(file, 'muzzu')
-        console.log("response:",response);
+
+        const fileData = await File.create({
+            name,
+            email,
+            tags,
+            imageUrl:response.secure_url
+        })
 
         res.json({
             success:true,
+            imageUrl:response.secure_url,
             message:"Image Uplaoded Successfully"
         })
 
 
     } catch (error) {
-        res.status(522).json({
+        res.status(500).json({
             success:false,
             error:error.message,
         }) 
