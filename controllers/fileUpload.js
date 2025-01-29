@@ -28,9 +28,9 @@ const isSupportedFormat = (type, supportedFormats) =>{
     return supportedFormats.includes(type)
 }
 
-const uploadFileToCloudinary = async (file,folder) =>{
+async function uploadFileToCloudinary(file,folder){
     const options = {folder}
-    await cloudinary.uploader.upload(file.tempFilePath,options)
+    return await cloudinary.uploader.upload(file.tempFilePath,options)
 }
 
 exports.imageUpload = async (req,res)=>{
@@ -43,8 +43,9 @@ exports.imageUpload = async (req,res)=>{
 
         const supportedFormats = ['jpg','jpeg','png'];
         const fileType = file.name.split('.')[1].toLowerCase();
-        
+        console.log("fileType: ",fileType)
         if(!isSupportedFormat(fileType,supportedFormats)){
+            console.log("entered into !isSupportedFormat")
             return res.status(500).json({
                 success:false,
                 message:"file format not supported!"
@@ -52,11 +53,16 @@ exports.imageUpload = async (req,res)=>{
         }
 
         const response = await uploadFileToCloudinary(file, 'muzzu')
+        console.log("response:",response);
 
+        res.json({
+            success:true,
+            message:"Image Uplaoded Successfully"
+        })
 
 
     } catch (error) {
-        res.status(500).json({
+        res.status(522).json({
             success:false,
             error:error.message,
         }) 

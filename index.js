@@ -8,7 +8,7 @@ const fileupload = require('express-fileupload')
 
 // middlewares
 app.use(express.json());
-app.use(fileupload())
+app.use(fileupload({ useTempFiles: true, tempFileDir: "/tmp/" }))
 
 // database connection
 require('./config/database').connectDB();
