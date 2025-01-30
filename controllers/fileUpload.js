@@ -128,11 +128,11 @@ exports.compressedImageUpload = async (req,res) =>{
     try {
 
         const {email,name,tags} = req.body;
-        const file = req.files.videoFile;
+        const file = req.files.imageFile;
 
         console.log("file: ",file)
 
-        const supportedFormats = ['mov','mp4'];
+        const supportedFormats = ['jpg','jpeg','png'];
         const fileType = file.name.split('.')[1].toLowerCase();
         console.log("fileType: ",fileType)
 
@@ -143,7 +143,7 @@ exports.compressedImageUpload = async (req,res) =>{
             })
         }
 
-        const response = await uploadFileToCloudinary(file, 'muzzu',30)
+        const response = await uploadFileToCloudinary(file, 'muzzu',90)
 
         console.log("response:",response)
 
@@ -161,7 +161,7 @@ exports.compressedImageUpload = async (req,res) =>{
         })
         
     }catch (error) {
-            res.status(555).json({
+            res.status(552).json({
                 success:false,
                 error:error.message,
         }) 
