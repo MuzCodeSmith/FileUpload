@@ -25,11 +25,16 @@ exports.localFileUpload = async (req,res)=>{
 }
 
 const isSupportedFormat = (type, supportedFormats) =>{
+    console.log("type:--------------- ",type,);
+    console.log("supportedFormats.includes(type): ",supportedFormats.includes(type));
+    
     return supportedFormats.includes(type)
 }
 
 async function uploadFileToCloudinary(file,folder){
     const options = {folder}
+    console.log("file:",file)
+    options.resource_type ="auto";
     return await cloudinary.uploader.upload(file.tempFilePath,options)
 }
 
@@ -80,10 +85,13 @@ exports.videoUpload = async (req,res) =>{
         const {email,name,tags} = req.body;
         const file = req.files.videoFile;
 
+        console.log("file: ",file)
+
         const supportedFormats = ['mov','mp4'];
         const fileType = file.name.split('.')[1].toLowerCase();
+        console.log("fileType: ",fileType)
 
-        if(!isSupportedFormat(file,supportedFormats)){
+        if(!isSupportedFormat(fileType,supportedFormats)){
             return res.status(400).json({
                 success:false,
                 message:"File format not supported"
@@ -91,6 +99,8 @@ exports.videoUpload = async (req,res) =>{
         }
 
         const response = await uploadFileToCloudinary(file, 'muzzu')
+
+        console.log("response:",response)
 
         const fileData = await File.create({
             tags,
@@ -106,7 +116,7 @@ exports.videoUpload = async (req,res) =>{
         })
         
     }catch (error) {
-            res.status(500).json({
+            res.status(555).json({
                 success:false,
                 error:error.message,
         }) 
