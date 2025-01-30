@@ -73,3 +73,42 @@ exports.imageUpload = async (req,res)=>{
         }) 
     }
 }
+
+exports.videoUpload = async (req,res) =>{
+    try {
+
+        const {email,name,tags} = req.body;
+        const file = req.files.videoFile;
+
+        const supportedFormats = ['mov','mp4'];
+        const fileType = file.name.split('.')[1].toLowerCase();
+
+        if(!isSupportedFormat(file,supportedFormats)){
+            return res.status(400).json({
+                success:false,
+                message:"File format not supported"
+            })
+        }
+
+        const response = await uploadFileToCloudinary(file, 'muzzu')
+
+        const fileData = await File.create({
+            tags,
+            email,
+            name,
+            imageUrl:response.secure_url
+        })
+
+        res.json({
+            success:true,
+            imageUrl:response.secure_url,
+            message:"Video Uplaoded Successfully"
+        })
+        
+    }catch (error) {
+            res.status(500).json({
+                success:false,
+                error:error.message,
+        }) 
+    }
+}
