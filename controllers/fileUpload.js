@@ -4,7 +4,6 @@ const cloudinary = require('cloudinary').v2;
 exports.localFileUpload = async (req,res)=>{
     try {
         const file = req.files.file;
-        console.log("File aa gai ji!",file)
 
         let path = __dirname + "/files/"+ Date.now() + `.${file.name.split('.')[1]}`;
         
@@ -25,15 +24,12 @@ exports.localFileUpload = async (req,res)=>{
 }
 
 const isSupportedFormat = (type, supportedFormats) =>{
-    console.log("type:--------------- ",type,);
-    console.log("supportedFormats.includes(type): ",supportedFormats.includes(type));
     
     return supportedFormats.includes(type)
 }
 
 async function uploadFileToCloudinary(file,folder,quality){
     const options = {folder}
-    console.log("file:",file)
     options.resource_type ="auto";
 
     if(quality){
@@ -52,7 +48,6 @@ exports.imageUpload = async (req,res)=>{
         const fileType = file.name.split('.')[1].toLowerCase();
 
         if(!isSupportedFormat(fileType,supportedFormats)){
-            console.log("entered into !isSupportedFormat")
             return res.status(500).json({
                 success:false,
                 message:"file format not supported!"
