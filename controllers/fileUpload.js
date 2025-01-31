@@ -125,11 +125,9 @@ exports.compressedImageUpload = async (req,res) =>{
         const {email,name,tags} = req.body;
         const file = req.files.imageFile;
 
-        console.log("file: ",file)
 
         const supportedFormats = ['jpg','jpeg','png'];
         const fileType = file.name.split('.')[1].toLowerCase();
-        console.log("fileType: ",fileType)
 
         if(!isSupportedFormat(fileType,supportedFormats)){
             return res.status(400).json({
@@ -140,7 +138,6 @@ exports.compressedImageUpload = async (req,res) =>{
 
         const response = await uploadFileToCloudinary(file, 'muzzu',90)
 
-        console.log("response:",response)
 
         const fileData = await File.create({
             tags,
